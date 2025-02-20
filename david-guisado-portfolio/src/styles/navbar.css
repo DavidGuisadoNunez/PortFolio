@@ -1,0 +1,12 @@
+nav {
+    transition: background 0.3s ease-in-out;
+  }
+  
+  nav ul li {
+    transition: color 0.3s ease-in-out;
+  }
+  
+  nav ul li:hover {
+    color: #ffcc00;
+  }
+  
