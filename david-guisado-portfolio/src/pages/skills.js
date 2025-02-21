@@ -1,25 +1,27 @@
+import { useCallback } from "react";
+import { useInView } from "react-intersection-observer";
 import Navbar from "../components/NavBar";
 import { FaHtml5, FaCss3Alt, FaJs, FaReact, FaAngular, FaNodeJs } from "react-icons/fa";
 import { SiNextdotjs, SiMongodb, SiFigma, SiTypescript } from "react-icons/si";
 import { motion } from "framer-motion";
 import Particles from "react-tsparticles";
 import { loadSlim } from "tsparticles-slim";
-import { useCallback } from "react";
+
+// Lista de habilidades con colores y bordes personalizados
+const skills = [
+  { name: "HTML", icon: <FaHtml5 className="text-orange-500" />, borderColor: "border-orange-500", glow: "hover:shadow-orange-500/50" },
+  { name: "CSS", icon: <FaCss3Alt className="text-blue-500" />, borderColor: "border-blue-500", glow: "hover:shadow-blue-500/50" },
+  { name: "JavaScript", icon: <FaJs className="text-yellow-400" />, borderColor: "border-yellow-400", glow: "hover:shadow-yellow-400/50" },
+  { name: "TypeScript", icon: <SiTypescript className="text-blue-500" />, borderColor: "border-blue-500", glow: "hover:shadow-blue-500/50" },
+  { name: "React", icon: <FaReact className="text-blue-400" />, borderColor: "border-blue-400", glow: "hover:shadow-blue-400/50" },
+  { name: "Angular", icon: <FaAngular className="text-red-500" />, borderColor: "border-red-500", glow: "hover:shadow-red-500/50" },
+  { name: "Next.js", icon: <SiNextdotjs className="text-white" />, borderColor: "border-white", glow: "hover:shadow-white/50" },
+  { name: "Node.js", icon: <FaNodeJs className="text-green-500" />, borderColor: "border-green-500", glow: "hover:shadow-green-500/50" },
+  { name: "MongoDB", icon: <SiMongodb className="text-green-400" />, borderColor: "border-green-400", glow: "hover:shadow-green-400/50" },
+  { name: "Figma", icon: <SiFigma className="text-pink-400" />, borderColor: "border-pink-400", glow: "hover:shadow-pink-400/50" },
+];
 
 export default function Skills() {
-  const skills = [
-    { name: "HTML", icon: <FaHtml5 className="text-orange-500" />, borderColor: "border-orange-500", glow: "hover:shadow-orange-500/50" },
-    { name: "CSS", icon: <FaCss3Alt className="text-blue-500" />, borderColor: "border-blue-500", glow: "hover:shadow-blue-500/50" },
-    { name: "JavaScript", icon: <FaJs className="text-yellow-400" />, borderColor: "border-yellow-400", glow: "hover:shadow-yellow-400/50" },
-    { name: "TypeScript", icon: <SiTypescript className="text-blue-500" />, borderColor: "border-blue-500", glow: "hover:shadow-blue-500/50" },
-    { name: "React", icon: <FaReact className="text-blue-400" />, borderColor: "border-blue-400", glow: "hover:shadow-blue-400/50" },
-    { name: "Angular", icon: <FaAngular className="text-red-500" />, borderColor: "border-red-500", glow: "hover:shadow-red-500/50" },
-    { name: "Next.js", icon: <SiNextdotjs className="text-white" />, borderColor: "border-white", glow: "hover:shadow-white/50" },
-    { name: "Node.js", icon: <FaNodeJs className="text-green-500" />, borderColor: "border-green-500", glow: "hover:shadow-green-500/50" },
-    { name: "MongoDB", icon: <SiMongodb className="text-green-400" />, borderColor: "border-green-400", glow: "hover:shadow-green-400/50" },
-    { name: "Figma", icon: <SiFigma className="text-pink-400" />, borderColor: "border-pink-400", glow: "hover:shadow-pink-400/50" },
-  ];
-
   const particlesInit = useCallback(async (engine) => {
     await loadSlim(engine);
   }, []);
@@ -86,24 +88,7 @@ export default function Skills() {
             }}
           >
             {skills.map((skill, index) => (
-              <motion.div
-                key={index}
-                className={`bg-gray-800 text-white p-6 md:p-8 rounded-xl shadow-lg flex flex-col items-center justify-center space-y-2 
-                border-2 ${skill.borderColor} ${skill.glow} transition-all duration-300 w-full max-w-[350px] md:max-w-[200px]`}
-                whileHover={{ scale: 1.15, rotate: 5, boxShadow: "0px 0px 15px rgba(255,255,255,0.5)" }}
-                whileTap={{ scale: 0.9 }}
-                animate={{ y: [0, -10, 0], transition: { duration: 3, repeat: Infinity, ease: "easeInOut" } }}
-              >
-                <motion.div
-                  className="text-6xl md:text-7xl"
-                  initial={{ scale: 0.5, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  transition={{ type: "spring", stiffness: 100, damping: 10, delay: index * 0.1 }}
-                >
-                  {skill.icon}
-                </motion.div>
-                <span className="text-lg md:text-xl font-semibold whitespace-nowrap">{skill.name}</span>
-              </motion.div>
+              <SkillCard key={index} skill={skill} index={index} />
             ))}
           </motion.div>
         </motion.div>
@@ -111,3 +96,32 @@ export default function Skills() {
     </>
   );
 }
+
+// ✅ **Nuevo componente `SkillCard` que maneja `useInView` correctamente**
+const SkillCard = ({ skill, index }) => {
+  const { ref, inView } = useInView({
+    triggerOnce: false, // Permite animación cada vez que aparece
+    threshold: 0.2, // Se activa cuando el 20% del elemento es visible
+  });
+
+  return (
+    <motion.div
+      ref={ref} // Usa el Hook para detectar cuando está visible
+      className={`bg-gray-800 text-white p-6 md:p-8 rounded-xl shadow-lg flex flex-col items-center justify-center space-y-2 
+      border-2 ${skill.borderColor} ${skill.glow} transition-all duration-300 w-full max-w-[350px] md:max-w-[200px]`}
+      initial={{ opacity: 0, y: 50 }} // Inicia fuera de la vista
+      animate={inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }} // Aparece cuando está en vista
+      transition={{ duration: 0.8, delay: index * 0.1 }}
+    >
+      <motion.div
+        className="text-6xl md:text-7xl"
+        initial={{ scale: 0.5, opacity: 0 }}
+        animate={inView ? { scale: 1, opacity: 1 } : { scale: 0.5, opacity: 0 }}
+        transition={{ type: "spring", stiffness: 100, damping: 10, delay: index * 0.1 }}
+      >
+        {skill.icon}
+      </motion.div>
+      <span className="text-lg md:text-xl font-semibold whitespace-nowrap">{skill.name}</span>
+    </motion.div>
+  );
+};
