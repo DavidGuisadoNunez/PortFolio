@@ -1,4 +1,4 @@
-import Navbar from "../components/Navbar";
+import Navbar from "../components/NavBar";
 import { FaGithub } from "react-icons/fa";
 import Particles from "react-tsparticles";
 import { loadSlim } from "tsparticles-slim";
@@ -10,22 +10,22 @@ export default function Projects() {
     {
       title: "Football Teams App",
       description: "A web application displaying a list of football teams, including their country and stadium.",
-      github: "https://github.com/tuusuario/football-teams-app",
+      github: "https://github.com/DavidGuisadoNunez/football-teams",
     },
     {
       title: "Notes Manager",
       description: "An intuitive application to create, edit, delete, and manage notes efficiently.",
-      github: "https://github.com/tuusuario/notes-manager",
+      github: "https://github.com/DavidGuisadoNunez/DAWEServidor/tree/main/ProyectoNotas",
     },
     {
       title: "Car Dealership",
       description: "A vehicle dealership platform where users can browse and purchase cars.",
-      github: "https://github.com/tuusuario/car-dealership",
+      github: "https://github.com/DavidGuisadoNunez/Guisauto",
     },
     {
       title: "Personal Portfolio",
       description: "A modern and animated portfolio website built with Next.js, Tailwind CSS, and Framer Motion.",
-      github: "https://github.com/tuusuario/portfolio",
+      github: "https://github.com/DavidGuisadoNunez/PortFolio/tree/main/david-guisado-portfolio",
     }
   ];
 

@@ -1,4 +1,4 @@
-import Navbar from "../components/Navbar";
+import Navbar from "../components/NavBar";
 import Link from "next/link";
 import Particles from "react-tsparticles";
 import { loadSlim } from "tsparticles-slim";

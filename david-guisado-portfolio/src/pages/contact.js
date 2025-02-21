@@ -1,5 +1,5 @@
-import Navbar from "../components/Navbar";
-import { FaGithub, FaLinkedin, FaEnvelope, FaPhone, FaCalendarAlt } from "react-icons/fa";
+import Navbar from "../components/NavBar";
+import { FaGithub, FaLinkedin, FaEnvelope, FaPhone, FaCalendarAlt, FaMapMarkerAlt, FaCar } from "react-icons/fa";
 import Image from "next/image";
 import Particles from "react-tsparticles";
 import { loadSlim } from "tsparticles-slim";
@@ -79,6 +79,12 @@ export default function Contact() {
               <p className="flex items-center justify-center md:justify-start">
                 <FaCalendarAlt className="mr-3 text-yellow-400 text-3xl" /> February 2, 2005
               </p>
+              <p className="flex items-center justify-center md:justify-start">
+                <FaMapMarkerAlt className="mr-3 text-yellow-400 text-3xl" /> Sevilla, España
+              </p>
+              <p className="flex items-center justify-center md:justify-start">
+                <FaCar className="mr-3 text-yellow-400 text-3xl" /> Vehículo propio
+              </p>
             </div>
 
             {/* Avatar con animación */}
@@ -108,7 +114,7 @@ export default function Contact() {
               <FaGithub />
             </a>
             <a
-              href="https://linkedin.com/in/tu-linkedin"
+              href="https://www.linkedin.com/in/david-guisado-nu%C3%B1ez-933428271/"
               target="_blank"
               rel="noopener noreferrer"
               className="text-white hover:text-yellow-400 transition-transform transform hover:scale-125"

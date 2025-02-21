@@ -1,4 +1,4 @@
-import Navbar from "../components/Navbar";
+import Navbar from "../components/NavBar";
 import { FaHtml5, FaCss3Alt, FaJs, FaReact, FaAngular, FaNodeJs } from "react-icons/fa";
 import { SiNextdotjs, SiMongodb, SiFigma, SiTypescript } from "react-icons/si";
 import { motion } from "framer-motion";

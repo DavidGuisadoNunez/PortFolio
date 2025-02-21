@@ -1,14 +1,16 @@
 import { useState, useCallback } from "react";
+import { useRouter } from "next/router";
 import { motion } from "framer-motion";
 import { Typewriter } from "react-simple-typewriter";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub, faLinkedin } from "@fortawesome/free-brands-svg-icons";
-import { faDownload, faEye, faUser, faCogs, faFolder, faEnvelope } from "@fortawesome/free-solid-svg-icons";
+import { faDownload, faEye } from "@fortawesome/free-solid-svg-icons";
 import Image from "next/image";
 import Particles from "react-tsparticles";
 import { loadSlim } from "tsparticles-slim";
 
 export default function Home() {
+  const router = useRouter();
   const [animatingViewCV, setAnimatingViewCV] = useState(false);
   const [animatingDownloadCV, setAnimatingDownloadCV] = useState(false);
 
@@ -18,22 +20,18 @@ export default function Home() {
 
   const handleCVClick = () => {
     setAnimatingViewCV(true);
-    setTimeout(() => {
-      window.open("/cv", "_blank");
-      setAnimatingViewCV(false);
-    }, 2000);
+    window.open("/cv", "_blank"); // Abre inmediatamente
+    setTimeout(() => setAnimatingViewCV(false), 2000); // Reactivar botón
   };
 
   const handleDownloadClick = () => {
     setAnimatingDownloadCV(true);
-    setTimeout(() => {
-      window.open("/cv.pdf", "_blank");
-      setAnimatingDownloadCV(false);
-    }, 2000);
+    window.open("/cv.pdf", "_blank"); // Abre inmediatamente
+    setTimeout(() => setAnimatingDownloadCV(false), 2000);
   };
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="relative flex flex-col min-h-screen">
       {/* Fondo animado */}
       <Particles
         init={particlesInit}
@@ -49,37 +47,11 @@ export default function Home() {
             size: { value: 3, random: true },
           },
         }}
-        className="absolute inset-0 w-full h-full"
+        className="absolute inset-0 w-full h-full pointer-events-none" // Evita bloquear clicks
       />
 
       {/* Contenido principal */}
-      <main className="flex flex-col items-center justify-center flex-grow text-white text-center p-6 pt-20 md:pt-32 space-y-10">
-        
-        {/* Botones de navegación */}
-        <motion.div
-          className="flex flex-col space-y-4 md:flex-row md:space-x-6 md:space-y-0"
-          initial={{ opacity: 0, y: -30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
-        >
-          {[
-            { icon: faUser, href: "/about", label: "About" },
-            { icon: faCogs, href: "/skills", label: "Skills" },
-            { icon: faFolder, href: "/projects", label: "Projects" },
-            { icon: faEnvelope, href: "/contact", label: "Contact" },
-          ].map((item, index) => (
-            <motion.a
-              key={index}
-              href={item.href}
-              className="group flex items-center space-x-4 bg-gray-900 p-4 rounded-xl shadow-lg border border-yellow-400 hover:shadow-yellow-400 transition-all duration-300 md:text-xl"
-              whileHover={{ scale: 1.1 }}
-            >
-              <FontAwesomeIcon icon={item.icon} className="text-yellow-400 text-2xl" />
-              <span className="text-white">{item.label}</span>
-            </motion.a>
-          ))}
-        </motion.div>
-
+      <main className="relative flex flex-col items-center justify-center flex-grow text-white text-center p-6 pt-20 md:pt-32 space-y-10 z-10">
         {/* Texto central */}
         <motion.div
           className="space-y-6"
@@ -104,7 +76,7 @@ export default function Home() {
 
         {/* Avatar flotante */}
         <motion.div
-          className="relative flex items-center justify-center mt-6"
+          className="relative flex items-center justify-center mt-6 z-20"
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
@@ -116,41 +88,44 @@ export default function Home() {
         </motion.div>
 
         {/* Botones de CV */}
-        <div className="flex flex-col space-y-4">
-          {!animatingViewCV && (
-            <motion.button
-              onClick={handleCVClick}
-              className="bg-yellow-400 text-black px-8 py-4 rounded-lg font-semibold hover:bg-yellow-500 transition text-lg md:text-xl flex items-center justify-center gap-3"
-              whileHover={{ scale: 1.1 }}
-            >
-              <FontAwesomeIcon icon={faEye} />
-              View CV
-            </motion.button>
-          )}
-          {!animatingDownloadCV && (
-            <motion.button
-              onClick={handleDownloadClick}
-              className="border border-yellow-400 px-8 py-4 rounded-lg font-semibold hover:bg-yellow-400 hover:text-black transition text-lg md:text-xl flex items-center justify-center gap-3"
-              whileHover={{ scale: 1.1 }}
-            >
-              <FontAwesomeIcon icon={faDownload} />
-              Download CV
-            </motion.button>
-          )}
+        <div className="flex flex-col space-y-4 z-20">
+          <motion.button
+            onClick={handleCVClick}
+            disabled={animatingViewCV}
+            className={`bg-yellow-400 text-black px-8 py-4 rounded-lg font-semibold hover:bg-yellow-500 transition text-lg md:text-xl flex items-center justify-center gap-3 ${
+              animatingViewCV ? "opacity-50 cursor-not-allowed" : ""
+            }`}
+            whileHover={{ scale: animatingViewCV ? 1 : 1.1 }}
+          >
+            <FontAwesomeIcon icon={faEye} />
+            View CV
+          </motion.button>
+
+          <motion.button
+            onClick={handleDownloadClick}
+            disabled={animatingDownloadCV}
+            className={`border border-yellow-400 px-8 py-4 rounded-lg font-semibold hover:bg-yellow-400 hover:text-black transition text-lg md:text-xl flex items-center justify-center gap-3 ${
+              animatingDownloadCV ? "opacity-50 cursor-not-allowed" : ""
+            }`}
+            whileHover={{ scale: animatingDownloadCV ? 1 : 1.1 }}
+          >
+            <FontAwesomeIcon icon={faDownload} />
+            Download CV
+          </motion.button>
         </div>
       </main>
 
       {/* Iconos de redes sociales - SIEMPRE ABAJO DEL TODO */}
       <motion.footer
-        className="w-full flex justify-center py-6 mt-auto"
+        className="w-full flex justify-center py-6 mt-auto z-20"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1 }}
       >
         <div className="flex space-x-6">
           {[
-            { icon: faGithub, href: "https://github.com/" },
-            { icon: faLinkedin, href: "https://linkedin.com/" },
+            { icon: faGithub, href: "https://github.com/DavidGuisadoNunez" },
+            { icon: faLinkedin, href: "https://www.linkedin.com/in/david-guisado-nu%C3%B1ez-933428271/" },
           ].map((item, index) => (
             <a
               key={index}
